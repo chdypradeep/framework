@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="DPLAT blaze Verification" >
+
+    <test name="BABTestClasses">
+        <classes>
+            <class name="tests.BaseTest">
+            </class>
+        </classes>
+    </test>
+   
+</suite>
