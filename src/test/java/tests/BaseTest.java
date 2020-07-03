@@ -20,7 +20,7 @@ public class BaseTest {
 	
 	public ixigoPages ixigopage;
 	public googlePages googlepages;
-	private WebDriver driver;
+	public WebDriver driver;
 	
 	public WebDriver getDriver() {
 		return driver;
@@ -34,6 +34,7 @@ public class BaseTest {
 		ixigopage.clickSearchButton();
 		Thread.sleep(1000);
 		driver.close();
+		driver.quit();
 		//driver.launchApp();
 	}
 	
@@ -46,6 +47,7 @@ public class BaseTest {
 		googlepages.enterSearchValue("ashish kumar");
 		Thread.sleep(1000);
 		driver.close();
+		driver.quit();
 		//driver.launchApp();
 	}
 	

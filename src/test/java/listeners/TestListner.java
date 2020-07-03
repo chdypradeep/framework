@@ -2,19 +2,15 @@ package listeners;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
+
 
 import javax.imageio.ImageIO;
 
-import tests.BaseTest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
@@ -26,10 +22,10 @@ import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileElement;
 import reports.ExtentReport;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
-import utils.DriverFactory;
 
 public class TestListner implements ITestListener {
 	WebDriver driver;
@@ -49,9 +45,19 @@ public class TestListner implements ITestListener {
 	 */
 	public void onTestSuccess(ITestResult result) {
 		ExtentReport.getTest().log(Status.PASS, "test is Skipped");
+		WebDriver driver = null;
 		try {
-			ExtentReport.getTest().pass("Test Failed", 
-					MediaEntityBuilder.createScreenCaptureFromBase64String(new String(getScreenShotString(driver, result), StandardCharsets.US_ASCII)).build());
+			driver = (WebDriver) result.getTestClass().getRealClass().getDeclaredField("driver")
+					.get(result.getInstance());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			ExtentReport.getTest().pass("Test Failed",
+					MediaEntityBuilder
+							.createScreenCaptureFromBase64String(
+									new String(getScreenShotString(driver, result), StandardCharsets.US_ASCII))
+							.build());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -67,8 +73,13 @@ public class TestListner implements ITestListener {
 	 */
 	public void onTestFailure(ITestResult result) {
 
-		Object currentClass = result.getInstance();
-		driver = ((BaseTest) currentClass).getDriver();
+		WebDriver driver = null;
+		try {
+			driver = (WebDriver) result.getTestClass().getRealClass().getDeclaredField("driver")
+					.get(result.getInstance());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		if (result.getThrowable() != null) {
 			logger.error(result.getThrowable().getStackTrace());
 			ExtentReport.getTest().fail(result.getThrowable());
@@ -77,9 +88,12 @@ public class TestListner implements ITestListener {
 			ExtentReport.getTest().fail(result.getMethod().getMethodName() + " has failed");
 		}
 		try {
-	//		ExtentReport.getTest().addScreenCaptureFromBase64String(getScreenShotString(driver));
-			ExtentReport.getTest().fail("Test Failed", 
-					MediaEntityBuilder.createScreenCaptureFromBase64String(new String(getScreenShotString(driver, result), StandardCharsets.US_ASCII)).build());
+			// ExtentReport.getTest().addScreenCaptureFromBase64String(getScreenShotString(driver));
+			ExtentReport.getTest().fail("Test Failed",
+					MediaEntityBuilder
+							.createScreenCaptureFromBase64String(
+									new String(getScreenShotString(driver, result), StandardCharsets.US_ASCII))
+							.build());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -139,15 +153,17 @@ public class TestListner implements ITestListener {
 		ExtentReport.getReporter().flush();
 	}
 
-	public byte[] getScreenShotString(WebDriver driver,ITestResult result ) throws IOException {
-		String imagepath = System.getProperty("user.dir")+File.separator+"screenshots"+File.separator+result.getTestClass().getRealClass().getSimpleName()+File.separator+result.getName()+".jpg";
-		File outputfile = null ;
+	@SuppressWarnings("unchecked")
+	public byte[] getScreenShotString(WebDriver driver, ITestResult result) throws IOException {
+		String imagepath = System.getProperty("user.dir") + File.separator + "screenshots" + File.separator
+				+ result.getTestClass().getRealClass().getSimpleName() + File.separator + result.getName() + ".jpg";
+		File outputfile = null;
 		if (driver instanceof AppiumDriver) {
-			outputfile = ((AppiumDriver) driver).getScreenshotAs(OutputType.FILE);
+			outputfile = ((AppiumDriver<MobileElement>) driver).getScreenshotAs(OutputType.FILE);
 		} else {
 			BufferedImage bi = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(100))
 					.takeScreenshot(driver).getImage();
-				ImageIO.write(bi, "jpg", outputfile);
+			ImageIO.write(bi, "jpg", outputfile);
 		}
 		FileUtils.copyFile(outputfile, new File(imagepath));
 		byte[] fileContent = Base64.encodeBase64(FileUtils.readFileToByteArray(outputfile));

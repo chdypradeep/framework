@@ -19,7 +19,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class DriverFactory {
 
-	public static String driverType;
+	private static String driverType;
 	private static ThreadLocal<WebDriver> driverLocal = new ThreadLocal<WebDriver>() {
 		public WebDriver initialValue(){
 			WebDriver driver = null;
@@ -36,7 +36,9 @@ public class DriverFactory {
 		
 	public static WebDriver getDriver(String driverTypeValue) throws MalformedURLException {
 		driverType = driverTypeValue;
-		return driverLocal.get();	}
+		return driverLocal.get();	
+		//return startDriver(driverTypeValue);
+		}
 	
 	private static WebDriver startDriver(String driverType) throws MalformedURLException {
 		driverType = driverType.toLowerCase().trim();
