@@ -1,12 +1,15 @@
 <?xml version="1.0"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="DPLAT blaze Verification" >
-
+<suite name="DPLAT blaze Verification" parallel = "methods" thread-count = "2" >
+<listeners>  
+<listener class-name="listeners.TestListner"/>  
+</listeners> 
     <test name="BABTestClasses">
         <classes>
             <class name="tests.BaseTest">
             </class>
         </classes>
+        
     </test>
    
 </suite>
