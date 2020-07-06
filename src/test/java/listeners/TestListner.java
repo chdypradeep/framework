@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-
 import javax.imageio.ImageIO;
 
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +27,6 @@ import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 public class TestListner implements ITestListener {
-	WebDriver driver;
 	Logger logger = LogManager.getLogger(TestListner.class);
 
 	public void onTestStart(ITestResult result) {
@@ -45,23 +43,23 @@ public class TestListner implements ITestListener {
 	 */
 	public void onTestSuccess(ITestResult result) {
 		ExtentReport.getTest().log(Status.PASS, "test is Skipped");
-		WebDriver driver = null;
-		try {
-			driver = (WebDriver) result.getTestClass().getRealClass().getDeclaredField("driver")
-					.get(result.getInstance());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		try {
-			ExtentReport.getTest().pass("Test Failed",
-					MediaEntityBuilder
-							.createScreenCaptureFromBase64String(
-									new String(getScreenShotString(driver, result), StandardCharsets.US_ASCII))
-							.build());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    
+//		try {
+//			driver = (WebDriver) result.getTestClass().getRealClass().getDeclaredField("driver")
+//					.get(result.getInstance());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		try {
+//			ExtentReport.getTest().pass("Test Failed",
+//					MediaEntityBuilder
+//							.createScreenCaptureFromBase64String(
+//									new String(getScreenShotString(driver, result), StandardCharsets.US_ASCII))
+//							.build());
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	/**
@@ -74,12 +72,12 @@ public class TestListner implements ITestListener {
 	public void onTestFailure(ITestResult result) {
 
 		WebDriver driver = null;
-		try {
-			driver = (WebDriver) result.getTestClass().getRealClass().getDeclaredField("driver")
-					.get(result.getInstance());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			driver = (WebDriver) result.getTestClass().getRealClass().getDeclaredField("driver")
+//					.get(result.getInstance());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		if (result.getThrowable() != null) {
 			logger.error(result.getThrowable().getStackTrace());
 			ExtentReport.getTest().fail(result.getThrowable());
@@ -87,17 +85,17 @@ public class TestListner implements ITestListener {
 		} else {
 			ExtentReport.getTest().fail(result.getMethod().getMethodName() + " has failed");
 		}
-		try {
-			// ExtentReport.getTest().addScreenCaptureFromBase64String(getScreenShotString(driver));
-			ExtentReport.getTest().fail("Test Failed",
-					MediaEntityBuilder
-							.createScreenCaptureFromBase64String(
-									new String(getScreenShotString(driver, result), StandardCharsets.US_ASCII))
-							.build());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			// ExtentReport.getTest().addScreenCaptureFromBase64String(getScreenShotString(driver));
+//			ExtentReport.getTest().fail("Test Failed",
+//					MediaEntityBuilder
+//							.createScreenCaptureFromBase64String(
+//									new String(getScreenShotString(driver, result), StandardCharsets.US_ASCII))
+//							.build());
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	/**
@@ -141,6 +139,7 @@ public class TestListner implements ITestListener {
 	public void onStart(ITestContext context) {
 		// ExtentReport.getTest().log(Status.INFO, "test is started");
 		ExtentReport.getReporter().flush();
+		
 	}
 
 	/**

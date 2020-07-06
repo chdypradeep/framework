@@ -16,7 +16,8 @@ public class ExtentReport {
 	static ExtentReports extent;
 	final static String filePath = "Extent.html";
 	static Map<Integer, ExtentTest> extentTestMap = new HashMap<>();
-
+	//static ExtentTest test;
+	
 	public synchronized static ExtentReports getReporter() {
 		if (extent == null) {
 			ExtentHtmlReporter html = new ExtentHtmlReporter(System.getProperty("user.dir")+File.separator+"logs"+File.separator+"Extent.html");
@@ -31,6 +32,7 @@ public class ExtentReport {
 
 	public static synchronized ExtentTest getTest() {
 		return (ExtentTest) extentTestMap.get((int) (long) (Thread.currentThread().getId()));
+		//return test;
 	}
 
 	public static synchronized ExtentTest startTest(String testName, String desc) {
@@ -38,5 +40,5 @@ public class ExtentReport {
 		extentTestMap.put((int)(Thread.currentThread().getId()), test);
 		return test;
 	}
-
+	
 }
