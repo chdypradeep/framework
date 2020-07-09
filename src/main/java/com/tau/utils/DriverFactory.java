@@ -1,4 +1,4 @@
-package utils;
+package com.tau.utils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,10 +35,11 @@ public class DriverFactory {
 	public static WebDriver getDriver(String driverTypeValue) throws MalformedURLException {
 //		driverType = driverTypeValue;
 //		return driverLocal.get();	
-		return startDriver(driverTypeValue);
+		return new DriverFactory().startDriver(driverTypeValue);
+		// return startDriver(driverTypeValue);
 	}
 
-	private static WebDriver startDriver(String driverType) throws MalformedURLException {
+	private WebDriver startDriver(String driverType) throws MalformedURLException {
 		driverType = driverType.toLowerCase().trim();
 		WebDriver driver;
 		switch (driverType) {

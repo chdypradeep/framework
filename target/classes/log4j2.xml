@@ -1,29 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn">
-    <Properties>
-        <Property name="basePath">logs</Property>
-    </Properties>
- 
-    <Appenders>
-        <RollingFile name="fileLogger" fileName="${basePath}/ApplicationLogs.log" filePattern="${basePath}/ApplicationLogs-%d{yyyy-MM-dd}.log">
-            <PatternLayout>
-                <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-            </Policies>
-        </RollingFile>
- 
-        <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout   pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n" />
-        </Console>
-    </Appenders>
-    <Loggers>
-        <Logger name="com.ixigo" level="debug" additivity="true">
-            <appender-ref ref="fileLogger" level="debug" />
-        </Logger>
-        <Root level="debug" additivity="false">
-            <appender-ref ref="console" />
-        </Root>
-    </Loggers>
+	<Properties>
+		<Property name="basePath">logs</Property>
+	</Properties>
+
+	<Appenders>
+		<!-- <RollingFile name="fileLogger"
+			fileName="${basePath}/ApplicationLogs.log"
+			filePattern="${basePath}/ApplicationLogs-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPsolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingFile> -->
+		<Routing name="MyRoutingAppender">
+			<Routes pattern="$${ctx:ROUTINGKEY}">
+				<Route>
+					<RollingFile name="appender-${ctx:ROUTINGKEY}"
+						fileName="${ctx:ROUTINGKEY}/application.log"
+						filePattern="${ctx:ROUTINGKEY}/$${date:yyyy-MM-dd}/application-%d{yyyy-MM-dd}-%i.log">
+						<PatternLayout>
+							<Pattern>[${ctx:ROUTINGKEY} %-5level] %d{yyyy-MM-dd HH:mm:ss.SSS}%c{1}:%L - %m%n</Pattern>
+						</PatternLayout>
+						<Policies>
+							<TimeBasedTriggeringPolicy />
+							<SizeBasedTriggeringPolicy size="10MB" />
+						</Policies>
+						<DefaultRolloverStrategy max="5" />
+					</RollingFile>
+				</Route>
+			</Routes>
+		</Routing>
+
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.tau" level="debug" additivity="true">
+			<appender-ref ref="MyRoutingAppender" level="debug" />
+		</Logger>
+		<Root level="debug" additivity="false">
+			<appender-ref ref="console" />
+		</Root>
+	</Loggers>
 </Configuration>

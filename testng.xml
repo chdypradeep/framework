@@ -3,13 +3,21 @@
 <suite name="DPLAT blaze Verification" parallel="classes"
 	thread-count="2">
 	<listeners>
-		<listener class-name="listeners.TestListner" />
+		<listener class-name="com.tau.listeners.TestListner" />
 	</listeners>
-	<test name="BABTestClasses">
+	<test name="Chrome tests">
 		<parameter name="browser" value="chrome"></parameter>
 		<classes>
-			<class name="tests.TestClass1" />
-			<class name="tests.TestClass2" />
+			<class name="com.tau.tests.TestClass1" />
+			<class name="com.tau.tests.TestClass2" />
+		</classes>
+
+	</test>
+	<test name="Firefox tests">
+		<parameter name="browser" value="firefox"></parameter>
+		<classes>
+			<class name="com.tau.tests.TestClass1" />
+			<class name="com.tau.tests.TestClass2" />
 		</classes>
 
 	</test>

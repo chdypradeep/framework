@@ -1,11 +1,12 @@
-package tests;
+package com.tau.tests;
 
 import java.net.MalformedURLException;
 import java.util.concurrent.TimeUnit;
 
 import org.testng.annotations.Test;
 
-import pages.googlePages;
+import com.tau.pages.googlePages;
+import com.tau.tests.BaseTest;
 
 public class TestClass2 extends BaseTest {
 

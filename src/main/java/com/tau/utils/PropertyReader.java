@@ -1,4 +1,4 @@
-package utils;
+package com.tau.utils;
 
 import java.io.FileInputStream;
 import java.io.IOException;

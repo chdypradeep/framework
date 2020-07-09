@@ -1,26 +1,35 @@
-package pages;
+package com.tau.pages;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class ixigoPages extends Basepage {
-	Logger logger = LogManager.getLogger(ixigoPages.class);
+import com.tau.utils.BaseUtils;
+
+public class ixigoPages extends BaseUtils {
+	// Logger logger = LogManager.getLogger(ixigoPages.class);
 
 	public ixigoPages(WebDriver driver) {
 		super(driver);
+		PageFactory.initElements(driver, this);
 	}
 
 	@FindBy(xpath = "//button[text() = 'Search']")
 	public WebElement searchButton;
 
+	@FindBy(xpath = "//img[@title='ixigo.com']")
+	public WebElement logo;
+
 	public void clickSearchButton() {
-		WebDriverWait wait = new WebDriverWait(driver, 20);
-		wait.until(ExpectedConditions.elementToBeClickable(searchButton));
-		searchButton.click();
+
+		click(searchButton);
+	}
+
+	public void clickLogo() {
+
+		click(logo);
 	}
 }
